@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var listView = $("#listView").kendoListView({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Department/Get"
+                    },
+                    destroy: {
+                        url: "/Department/Delete",
+                        type: "POST"
+                        },
+                    update: {
+                        url: "/Department/Update",
+                        type: "POST"
+                    },
+                    create: {
+                        url: "/Department/Create",
+                        type: "POST"
+                    }
+                },
+            pageSize: 21,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            name: { nullable: true },
+                            code: { nullable: true }
+                        }
+                    }
+                }
+            },
+            template: kendo.template($("#template0").html()),
+            editTemplate: kendo.template($("#editTemplate0").html()),
+            dataBound: onDataBound
+        });
+    });
+
+    function addRecord(e) {
+        var listView = $("#listView").data("kendoListView");
+        listView.add();
+        e.preventDefault();
+    }
+
+    function onDataBound() {
+        console.log("dataBound");
+        //$(".k-listview-content").prepend("<div class='row'><div class='col-sm-2'><span>Name</span></div><div class='col-sm-2'><span>code</span></div></div>");
+    }
+</script>
+
+<script type="text/x-kendo-template" id="template0">
+    <div class='row'>
+        <div class='col-sm-4'><span>#:name#</span></div>
+        <div class='col-sm-2'><span>#:code#</span></div>
+        <div role='button' class='col-sm-1 k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
+        <div role='button' class='col-sm-1 k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="editTemplate0">
+    <div class='row'>
+        <div class='col-sm-4'><input type="text" class="k-input-inner" data-bind="value:name" name="name" /></div>
+        <div class='col-sm-2'><input type="text" class="k-input-inner" data-bind="value:code" name="code" /></div>
+        <div role='button' class='col-sm-1 k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
+        <div role='button' class='col-sm-1 k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
+    </div>
+</script>
+}
+<h2>Departments</h2>
+
+<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div class="divider"></div>
+<div class="container grid-header k-widget k-listview k-listview-bordered">
+    <div class='row'>
+        <div class='col-sm-4'><span>Name</span></div>
+        <div class='col-sm-2'><span>Code</span></div>
+    </div>
+</div>
+<div id="listView" class="container grid-striped">
+</div>
+
+
+

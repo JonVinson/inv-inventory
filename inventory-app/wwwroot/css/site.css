@@ -20,3 +20,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+i {
+    color: darkgrey
+}
+
+.grid-header {
+    background-color: rgba(0,0,0,.05);
+    font-weight: bold;
+}
+
+.grid-striped .row:nth-of-type(even) {
+    background-color: rgba(0,0,0,.05);
+}
+
+.row {
+    padding: 5px;
+}
+
+.divider {
+    margin: 5px;
+}
