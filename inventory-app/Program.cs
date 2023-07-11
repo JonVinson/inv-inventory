@@ -1,7 +1,19 @@
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore;
+using inventory_data;
+using inv_service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<InventoryContext>(config =>
+{
+    config.UseSqlServer(builder.Configuration.GetConnectionString("InventoryConnection"));
+});
+
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<InventoryService>();
 
 var app = builder.Build();
 
