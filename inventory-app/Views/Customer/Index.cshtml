@@ -9,21 +9,21 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Supplier/Get"
+                        url: "/Customer/Get"
                     },
                     destroy: {
-                        url: "/Supplier/Delete",
+                        url: "/Customer/Delete",
                         type: "POST"
                         },
                     update: {
-                        url: "/Supplier/Update",
+                        url: "/Customer/Update",
                         type: "POST",
                         complete: function (e) {
                             $("#listView").data("kendoListView").dataSource.read();
                         }
                     },
                     create: {
-                        url: "/Supplier/Create",
+                        url: "/Customer/Create",
                         type: "POST",
                         complete: function (e) {
                             $("#listView").data("kendoListView").dataSource.read();
@@ -105,7 +105,7 @@
 <style>
 </style>
 
-<h2>Suppliers</h2>
+<h2>Customers</h2>
 
 <a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
 <div class="divider"></div>

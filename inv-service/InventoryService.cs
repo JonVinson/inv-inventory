@@ -1,5 +1,6 @@
 ﻿using inventory_data;
 using System.Diagnostics;
+using System.Runtime.Versioning;
 
 namespace inv_service
 {
@@ -60,15 +61,29 @@ namespace inv_service
         #region Suppliers
         public IQueryable<Supplier> GetSuppliers()
         {
-            return _context.Suppliers;
+            return _context.Suppliers.OrderBy(s => s.Name);
         }
 
         public int CreateSupplier(Supplier model)
         {
-            _context.Suppliers.Add(model);
+            var supplier = new Supplier
+            {
+                Name = model.Name,
+                Code = model.Code,
+                Street = model.Street,
+                City = model.City,
+                State = model.State,
+                Country = model.Country,
+                PostalCode = model.PostalCode,
+                ContactEmail = model.ContactEmail,
+                ContactName = model.ContactName,
+                PhoneNumber = model.PhoneNumber
+            };
+
+            _context.Suppliers.Add(supplier);
             _context.SaveChanges();
 
-            return model.Id;
+            return supplier.Id;
         }
 
         public void DeleteSupplier(int id)
@@ -107,15 +122,29 @@ namespace inv_service
         #region Customers
         public IQueryable<Customer> GetCustomers()
         {
-            return _context.Customers;
+            return _context.Customers.OrderBy(c => c.Name);
         }
 
         public int CreateCustomer(Customer model)
         {
-            _context.Customers.Add(model);
+            var customer = new Customer
+            {
+                Name = model.Name,
+                Code = model.Code,
+                Street = model.Street,
+                City = model.City,
+                State = model.State,
+                Country = model.Country,
+                PostalCode = model.PostalCode,
+                ContactEmail = model.ContactEmail,
+                ContactName = model.ContactName,
+                PhoneNumber = model.PhoneNumber
+            };
+
+            _context.Customers.Add(customer);
             _context.SaveChanges();
 
-            return model.Id;
+            return customer.Id;
         }
 
         public void DeleteCustomer(int id)

@@ -10,12 +10,12 @@ using inventory_data;
 
 namespace inventory_app.Controllers
 {
-    public class SupplierController : Controller
+    public class CustomerController : Controller
     {
-        private readonly ILogger<SupplierController> _logger;
+        private readonly ILogger<CustomerController> _logger;
         private readonly InventoryService _inventoryService;
 
-        public SupplierController(ILogger<SupplierController> logger, InventoryService inventoryService)
+        public CustomerController(ILogger<CustomerController> logger, InventoryService inventoryService)
         {
             _logger = logger;
             _inventoryService = inventoryService;
@@ -30,7 +30,7 @@ namespace inventory_app.Controllers
         {
             try
             {
-                var suppliers = _inventoryService.GetSuppliers();
+                var suppliers = _inventoryService.GetCustomers();
                 return Json(suppliers);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace inventory_app.Controllers
         {
             try
             {
-                _inventoryService.DeleteSupplier(id);
+                _inventoryService.DeleteCustomer(id);
                 return Json(id);
             }
             catch (Exception ex)
@@ -56,11 +56,11 @@ namespace inventory_app.Controllers
         }
 
         [AcceptVerbs("POST")]
-        public JsonResult Update(Supplier model)
+        public JsonResult Update(Customer model)
         {
             try
             {
-                _inventoryService.UpdateSupplier(model);
+                _inventoryService.UpdateCustomer(model);
                 return Json(model.Id);
             }
             catch (Exception ex)
@@ -71,11 +71,11 @@ namespace inventory_app.Controllers
         }
 
         [AcceptVerbs("POST")]
-        public JsonResult Create(Supplier model)
+        public JsonResult Create(Customer model)
         {
             try
             {
-                int id = _inventoryService.CreateSupplier(model);
+                int id = _inventoryService.CreateCustomer(model);
                 return Json(id);
             }
             catch (Exception ex)
