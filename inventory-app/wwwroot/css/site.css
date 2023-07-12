@@ -41,3 +41,37 @@ i {
 .divider {
     margin: 5px;
 }
+
+#listView {
+    min-width: 1120px;
+}
+
+.grid-header {
+    font-size: 10px;
+    min-width: 1120px;
+}
+
+.grid-striped {
+    font-size: 10px;
+}
+
+.col-grid-cell {
+    width: 80px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.col-grid-cell input {
+    width: 100%;
+}
+
+.col-grid-button {
+    width: 20px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.k-listview-content {
+    overflow-x: hidden;
+}
+

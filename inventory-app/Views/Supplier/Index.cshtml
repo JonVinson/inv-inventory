@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var listView = $("#listView").kendoListView({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Supplier/Get"
+                    },
+                    destroy: {
+                        url: "/Supplier/Delete",
+                        type: "POST"
+                        },
+                    update: {
+                        url: "/Supplier/Update",
+                        type: "POST"
+                    },
+                    create: {
+                        url: "/Supplier/Create",
+                        type: "POST"
+                    }
+                },
+            pageSize: 21,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            name: { nullable: true },
+                            code: { nullable: true },
+                            street: { nullable: true },
+                            city: { nullable: true },
+                            state: { nullable: true },
+                            postalCode: { nullable: true },
+                            country: { nullable: true },
+                            phoneNumber: { nullable: true },
+                            contactName: { nullable: true },
+                            contactEmail: { nullable: true }
+                        }
+                    }
+                }
+            },
+            template: kendo.template($("#template0").html()),
+            editTemplate: kendo.template($("#editTemplate0").html()),
+            dataBound: onDataBound
+        });
+    });
+
+    function addRecord(e) {
+        var listView = $("#listView").data("kendoListView");
+        listView.add();
+        e.preventDefault();
+    }
+
+    function onDataBound() {
+        console.log("dataBound");
+        //$(".k-listview-content").prepend("<div class='row'><div class='col-grid-cell'><span>Name</span></div><div class='col-grid-cell'><span>code</span></div></div>");
+    }
+</script>
+
+<script type="text/x-kendo-template" id="template0">
+    <div class='row'>
+        <div class='col-grid-cell'><span>#:name#</span></div>
+        <div class='col-grid-cell'><span>#:code#</span></div>
+        <div class='col-grid-cell'><span>#:street#</span></div>
+        <div class='col-grid-cell'><span>#:city#</span></div>
+        <div class='col-grid-cell'><span>#:state#</span></div>
+        <div class='col-grid-cell'><span>#:postalCode#</span></div>
+        <div class='col-grid-cell'><span>#:country#</span></div>
+        <div class='col-grid-cell'><span>#:phoneNumber#</span></div>
+        <div class='col-grid-cell'><span>#:contactName#</span></div>
+        <div class='col-grid-cell'><span>#:contactEmail#</span></div>
+        <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
+        <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="editTemplate0">
+    <div class='row'>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:name" name="name" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:code" name="code" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:street" name="street" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:city" name="city" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:state" name="state" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:postalCode" name="postalCode" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:country" name="country" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:phoneNumber" name="phoneNumber" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:contactName" name="contactName" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:contactEmail" name="contactEmail" /></div>
+        <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
+        <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
+    </div>
+</script>
+}
+
+<style>
+</style>
+
+<h2>Suppliers</h2>
+
+<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div class="divider"></div>
+<div class="grid-header k-widget k-listview k-listview-bordered">
+    <div class='row'>
+        <div class='col-grid-cell'><span>Name</span></div>
+        <div class='col-grid-cell'><span>Code</span></div>
+        <div class='col-grid-cell'><span>Street</span></div>
+        <div class='col-grid-cell'><span>City</span></div>
+        <div class='col-grid-cell'><span>State</span></div>
+        <div class='col-grid-cell'><span>Zip</span></div>
+        <div class='col-grid-cell'><span>Country</span></div>
+        <div class='col-grid-cell'><span>Phone</span></div>
+        <div class='col-grid-cell'><span>Contact</span></div>
+        <div class='col-grid-cell'><span>Email</span></div>
+        <div class='col-grid-button'></div>
+        <div class='col-grid-button'></div>
+    </div>
+</div>
+<div id="listView" class="container grid-striped">
+</div>
+
+
+
