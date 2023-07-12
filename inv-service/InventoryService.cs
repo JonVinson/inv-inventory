@@ -179,5 +179,50 @@ namespace inv_service
             }
         }
         #endregion
+
+        #region Manufacturers
+        public IQueryable<Manufacturer> GetManufacturers()
+        {
+            return _context.Manufacturers.OrderBy(c => c.Name);
+        }
+
+        public int CreateManufacturer(Manufacturer model)
+        {
+            var manufacturer = new Manufacturer
+            {
+                Name = model.Name,
+                Code = model.Code,
+            };
+
+            _context.Manufacturers.Add(manufacturer);
+            _context.SaveChanges();
+
+            return manufacturer.Id;
+        }
+
+        public void DeleteManufacturer(int id)
+        {
+            var manufacturer = _context.Manufacturers.FirstOrDefault(p => p.Id == id);
+
+            if (manufacturer != null)
+            {
+                _context.Manufacturers.Remove(manufacturer);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateManufacturer(Manufacturer model)
+        {
+            var manufacturer = _context.Manufacturers.FirstOrDefault(p => p.Id == model.Id);
+
+            if (manufacturer != null)
+            {
+                manufacturer.Name = model.Name;
+                manufacturer.Code = model.Code;
+                _context.SaveChanges();
+            }
+        }
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ public partial class Manufacturer
 
     public string? Name { get; set; }
 
-    public string? Phone { get; set; }
+    public string? Code { get; set; }
 
     public virtual ICollection<Product>? Products { get; set; }
 }
