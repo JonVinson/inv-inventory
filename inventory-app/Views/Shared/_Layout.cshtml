@@ -22,6 +22,9 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Departments</a>
                         </li>
                         <li class="nav-item">
@@ -58,9 +61,14 @@
     <script src="~/js/kendo/kendo.core.min.js"></script>
     <script src="~/js/kendo/kendo.data.min.js"></script>
     <script src="~/js/kendo/kendo.binder.min.js"></script>
+    <script src="~/js/kendo/kendo.selectable.min.js"></script>
     <script src="~/js/kendo/kendo.editable.min.js"></script>
-    <script src="~/js/kendo/kendo.listview.min.js"></script>
     <script src="~/js/kendo/kendo.validator.min.js"></script>
+    <script src="~/js/kendo/kendo.popup.min.js"></script>
+    <script src="~/js/kendo/kendo.list.min.js"></script>
+    <script src="~/js/kendo/kendo.virtuallist.min.js"></script>
+    <script src="~/js/kendo/kendo.dropdownlist.min.js"></script>
+    <script src="~/js/kendo/kendo.listview.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

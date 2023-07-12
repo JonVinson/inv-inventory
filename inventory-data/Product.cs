@@ -11,13 +11,13 @@ public partial class Product
 
     public int ManufacturerId { get; set; }
 
-    public string? ManufacturerCode { get; set; }
+    public string? ModelNumber { get; set; }
 
     public string Description { get; set; } = null!;
 
     public double? Price { get; set; }
 
-    public byte[] Image { get; set; } = null!;
+    public byte[]? Image { get; set; } = null!;
 
     public virtual Department Department { get; set; } = null!;
 
