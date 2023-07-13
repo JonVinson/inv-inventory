@@ -1,4 +1,5 @@
 ﻿using inventory_data;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Runtime.Versioning;
 
@@ -220,6 +221,77 @@ namespace inv_service
             {
                 manufacturer.Name = model.Name;
                 manufacturer.Code = model.Code;
+                _context.SaveChanges();
+            }
+        }
+        #endregion
+
+        #region Products
+        public IQueryable<ProductViewModel> GetProducts(string? filter = null)
+        {
+            var query = _context.Products
+                .Select(p => new ProductViewModel
+                {
+                    Id = p.Id,
+                    DepartmentId = p.DepartmentId,
+                    ManufacturerId = p.ManufacturerId,
+                    DepartmentCode = p.Department.Code,
+                    ManufacturerCode = p.Manufacturer.Code,
+                    ModelNumber = p.ModelNumber,
+                    Description = p.Description,
+                    Price = p.Price
+                });
+
+            if (filter != null)
+            {
+                query = query.Where(p => p.Description.Contains(filter));
+            }
+
+            return query.OrderBy(p => p.DepartmentCode)
+                .ThenBy(p => p.ManufacturerCode)
+                .ThenBy(p => p.Description);
+        }
+
+        public int CreateProduct(ProductViewModel model)
+        {
+            var product = new Product
+            {
+                DepartmentId = model.DepartmentId,
+                ManufacturerId = model.ManufacturerId,
+                ModelNumber = model.ModelNumber,
+                Description = model.Description,
+                Price = model.Price
+            };
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+
+            return product.Id;
+        }
+
+        public void DeleteProduct(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateProduct(ProductViewModel model)
+        {
+            var product = _context.Products.Find(model.Id);
+
+            if (product != null)
+            {
+                product.Description = model.Description;
+                product.Price = model.Price;
+                product.ManufacturerId = model.ManufacturerId;
+                product.ModelNumber = model.ModelNumber;
+                product.DepartmentId = model.DepartmentId;
                 _context.SaveChanges();
             }
         }

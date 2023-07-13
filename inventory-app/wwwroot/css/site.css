@@ -61,6 +61,12 @@ i {
     overflow: hidden;
 }
 
+.col-grid-cell-125 {
+    width: 125px;
+    display: inline-block;
+    overflow: hidden;
+}
+
 .col-grid-cell-long {
     width: 160px;
     display: inline-block;
@@ -79,5 +85,9 @@ i {
 
 .k-listview-content {
     overflow-x: hidden;
+}
+
+.k-select .k-icon {
+    margin-left:-10px;
 }
 

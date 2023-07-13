@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var listView = $("#listView").kendoListView({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Product/Get"
+                    },
+                    destroy: {
+                        url: "/Product/Delete",
+                        type: "POST"
+                        },
+                    update: {
+                        url: "/Product/Update",
+                        type: "POST",
+                        complete: function (e) {
+                            $("#listView").data("kendoListView").dataSource.read();
+                        }
+                    },
+                    create: {
+                        url: "/Product/Create",
+                        type: "POST",
+                        complete: function (e) {
+                            $("#listView").data("kendoListView").dataSource.read();
+                        }
+                    }
+                },
+            pageSize: 21,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { nullable: false, editable: false },
+                            departmentId: { nullable: true },
+                            departmentCode: { nullable: true },
+                            manufacturerId: { nullable: true },
+                            manufacturerCode: { nullable: true },
+                            modelNumber: { nullable: true },
+                            description: { nullable: true },
+                            price: { nullable: true },
+                        }
+                    }
+                }
+            },
+            template: kendo.template($("#template0").html()),
+            editTemplate: kendo.template($("#editTemplate0").html()),
+            edit: onEdit
+        });
+    });
+
+    function addRecord(e) {
+        var listView = $("#listView").data("kendoListView");
+        listView.add();
+    }
+
+    function onEdit() {
+        var component = $("#deptId");
+        component.kendoDropDownList({
+            optionLabel: "Choose...",
+            filter: "startswith",
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Product/GetDepartments"
+                    }
+                }
+            }
+        });
+        component = $("#manuId");
+        component.kendoDropDownList({
+            optionLabel: "Choose...",
+            filter: "startswith",
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Product/GetManufacturers"
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<script type="text/x-kendo-template" id="template0">
+    <div class='row'>
+        <div class='col-grid-cell-125'><span>#:departmentCode#</span></div>
+        <div class='col-grid-cell-125'><span>#:manufacturerCode#</span></div>
+        <div class='col-grid-cell-long'><span>#:modelNumber#</span></div>
+        <div class='col-grid-cell-long'><span>#:description#</span></div>
+        <div class='col-grid-cell'><span>#:price#</span></div>
+        <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
+        <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="editTemplate0">
+    <div class='row'>
+        <div class='col-grid-cell-125'><span><input type="text" class="k-textbox deptId" data-bind="value:departmentId" name="departmentId" id="deptId" /><span></div>
+        <div class='col-grid-cell-125'><input type="text" class="k-textbox manuId" data-bind="value:manufacturerId" name="manufacturerId"id="manuId" /></div>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:modelNumber" name="modelNumber" /></div>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:description" name="description" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:price" name="price" /></div>
+        <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
+        <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
+    </div>
+</script>
+}
+
+<style>
+</style>
+
+<h2>Products</h2>
+
+<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div class="divider"></div>
+<div class="grid-header k-widget k-listview k-listview-bordered">
+    <div class='row'>
+        <div class='col-grid-cell-125'><span>Department</span></div>
+        <div class='col-grid-cell-125'><span>Manufacturer</span></div>
+        <div class='col-grid-cell-long'><span>Model Number</span></div>
+        <div class='col-grid-cell-long'><span>Description</span></div>
+        <div class='col-grid-cell'><span>Price</span></div>
+        <div class='col-grid-button'></div>
+        <div class='col-grid-button'></div>
+    </div>
+</div>
+
+<div id="listView" class="container grid-striped">
+</div>
+
+
