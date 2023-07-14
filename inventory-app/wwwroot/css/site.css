@@ -78,16 +78,23 @@ i {
 }
 
 .col-grid-button {
-    width: 20px;
+    width: 10px;
     display: inline-block;
     overflow: hidden;
 }
 
 .k-listview-content {
     overflow-x: hidden;
+    max-height:400px;
 }
 
 .k-select .k-icon {
     margin-left:-10px;
 }
 
+.footer {
+    position:fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
