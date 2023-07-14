@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using inventory_data;
 
@@ -11,9 +12,11 @@ using inventory_data;
 namespace inventory_data.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    partial class InventoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230714224441_INV-25")]
+    partial class INV25
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,6 +69,49 @@ namespace inventory_data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("inventory_data.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("inventory_data.Department", b =>
@@ -243,6 +289,49 @@ namespace inventory_data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("inventory_data.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Suppliers");
+                });
+
             modelBuilder.Entity("inventory_data.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -252,6 +341,9 @@ namespace inventory_data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -272,6 +364,9 @@ namespace inventory_data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
 
@@ -279,9 +374,13 @@ namespace inventory_data.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Transactions");
                 });
@@ -333,6 +432,10 @@ namespace inventory_data.Migrations
                         .WithMany("Transactions")
                         .HasForeignKey("CompanyId");
 
+                    b.HasOne("inventory_data.Customer", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("inventory_data.Employee", "Employee")
                         .WithMany("Transactions")
                         .HasForeignKey("EmployeeId");
@@ -343,6 +446,10 @@ namespace inventory_data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("inventory_data.Supplier", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("SupplierId");
+
                     b.Navigation("Company");
 
                     b.Navigation("Employee");
@@ -351,6 +458,11 @@ namespace inventory_data.Migrations
                 });
 
             modelBuilder.Entity("inventory_data.Company", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("inventory_data.Customer", b =>
                 {
                     b.Navigation("Transactions");
                 });
@@ -379,6 +491,11 @@ namespace inventory_data.Migrations
                 {
                     b.Navigation("InventoryItems");
 
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("inventory_data.Supplier", b =>
+                {
                     b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618

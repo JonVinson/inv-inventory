@@ -56,7 +56,7 @@ namespace inventory_app.Controllers
         }
 
         [AcceptVerbs("POST")]
-        public JsonResult Update(Supplier model)
+        public JsonResult Update(Company model)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace inventory_app.Controllers
         }
 
         [AcceptVerbs("POST")]
-        public JsonResult Create(Supplier model)
+        public JsonResult Create(Company model)
         {
             try
             {
