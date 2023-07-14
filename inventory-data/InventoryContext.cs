@@ -15,7 +15,7 @@ public partial class InventoryContext : DbContext
     {
     }
 
-    public virtual DbSet<Customer> Customers { get; set; }
+    public virtual DbSet<Company> Companies { get; set; }
     
     public virtual DbSet<Department> Departments { get; set; }
 
@@ -30,8 +30,6 @@ public partial class InventoryContext : DbContext
     public virtual DbSet<Manufacturer> Manufacturers { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using inventory_data;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 
 namespace inv_service
@@ -60,15 +61,18 @@ namespace inv_service
         #endregion
 
         #region Suppliers
-        public IQueryable<Supplier> GetSuppliers()
+        public IQueryable<Company> GetSuppliers()
         {
-            return _context.Suppliers.OrderBy(s => s.Name);
+            return _context.Companies
+                .Where(c => c.CompanyType == CompanyType.Supplier)
+                .OrderBy(s => s.Name);
         }
 
-        public int CreateSupplier(Supplier model)
+        public int CreateSupplier(Company model)
         {
-            var supplier = new Supplier
+            var supplier = new Company
             {
+                CompanyType = CompanyType.Supplier,
                 Name = model.Name,
                 Code = model.Code,
                 Street = model.Street,
@@ -81,7 +85,7 @@ namespace inv_service
                 PhoneNumber = model.PhoneNumber
             };
 
-            _context.Suppliers.Add(supplier);
+            _context.Companies.Add(supplier);
             _context.SaveChanges();
 
             return supplier.Id;
@@ -89,19 +93,19 @@ namespace inv_service
 
         public void DeleteSupplier(int id)
         {
-            var supplier = _context.Suppliers.FirstOrDefault(p => p.Id == id);
+            var supplier = _context.Companies.FirstOrDefault(p => p.Id == id);
 
             if (supplier != null)
             {
-                _context.Suppliers.Remove(supplier);
+                _context.Companies.Remove(supplier);
             }
 
             _context.SaveChanges();
         }
 
-        public void UpdateSupplier(Supplier model)
+        public void UpdateSupplier(Company model)
         {
-            var supplier = _context.Suppliers.FirstOrDefault(p => p.Id == model.Id);
+            var supplier = _context.Companies.FirstOrDefault(p => p.Id == model.Id);
 
             if (supplier != null)
             {
@@ -121,15 +125,18 @@ namespace inv_service
         #endregion
 
         #region Customers
-        public IQueryable<Customer> GetCustomers()
+        public IQueryable<Company> GetCustomers()
         {
-            return _context.Customers.OrderBy(c => c.Name);
+            return _context.Companies
+                .Where(c => c.CompanyType == CompanyType.Customer)
+                .OrderBy(c => c.Name);
         }
 
-        public int CreateCustomer(Customer model)
+        public int CreateCustomer(Company model)
         {
-            var customer = new Customer
+            var customer = new Company
             {
+                CompanyType = CompanyType.Customer,
                 Name = model.Name,
                 Code = model.Code,
                 Street = model.Street,
@@ -142,7 +149,7 @@ namespace inv_service
                 PhoneNumber = model.PhoneNumber
             };
 
-            _context.Customers.Add(customer);
+            _context.Companies.Add(customer);
             _context.SaveChanges();
 
             return customer.Id;
@@ -150,19 +157,19 @@ namespace inv_service
 
         public void DeleteCustomer(int id)
         {
-            var customer = _context.Customers.FirstOrDefault(p => p.Id == id);
+            var customer = _context.Companies.FirstOrDefault(p => p.Id == id);
 
             if (customer != null)
             {
-                _context.Customers.Remove(customer);
+                _context.Companies.Remove(customer);
             }
 
             _context.SaveChanges();
         }
 
-        public void UpdateCustomer(Customer model)
+        public void UpdateCustomer(Company model)
         {
-            var customer = _context.Customers.FirstOrDefault(p => p.Id == model.Id);
+            var customer = _context.Companies.FirstOrDefault(p => p.Id == model.Id);
 
             if (customer != null)
             {
