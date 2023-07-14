@@ -296,5 +296,73 @@ namespace inv_service
             }
         }
         #endregion
+
+        #region InventoryItems
+        public IQueryable<InventoryItemViewModel> GetInventoryItems(DateTime? startDate = null, DateTime? endDate = null)
+        {
+            var query = _context.PhysicalInventory
+                .Select(p => new InventoryItemViewModel
+                {
+                    Id = p.Id,
+                    ProductId = p.ProductId,
+                    Description = p.Product.Department.Code + " - " + p.Product.Manufacturer.Code
+                        + " - " + p.Product.ModelNumber + " - " + p.Product.Description,
+                    Quantity = p.Quantity,
+                    AsOfDate = p.AsOfDate
+                });
+
+            if (startDate != null)
+            {
+                query = query.Where(p => p.AsOfDate >= startDate);
+            }
+
+            if (endDate != null)
+            {
+                query = query.Where(p => p.AsOfDate <= endDate);
+            }
+
+            return query.OrderBy(p => p.AsOfDate);
+        }
+
+        public int CreateInventoryItem(InventoryItemViewModel model)
+        {
+            var inventoryItem = new InventoryItem
+            {
+                ProductId = model.ProductId,
+                AsOfDate = model.AsOfDate,
+                Quantity = model.Quantity,
+            };
+
+            _context.PhysicalInventory.Add(inventoryItem);
+            _context.SaveChanges();
+
+            return inventoryItem.Id;
+        }
+
+        public void DeleteInventoryItem(int id)
+        {
+            var inventoryItem = _context.PhysicalInventory.Find(id);
+
+            if (inventoryItem != null)
+            {
+                _context.PhysicalInventory.Remove(inventoryItem);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateInventoryItem(InventoryItemViewModel model)
+        {
+            var inventoryItem = _context.PhysicalInventory.Find(model.Id);
+
+            if (inventoryItem != null)
+            {
+                inventoryItem.ProductId = model.ProductId;
+                inventoryItem.AsOfDate = model.AsOfDate;
+                inventoryItem.Quantity = model.Quantity;
+                _context.SaveChanges();
+            }
+        }
+        #endregion
     }
 }

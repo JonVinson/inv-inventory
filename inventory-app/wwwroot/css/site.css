@@ -73,6 +73,12 @@ i {
     overflow: hidden;
 }
 
+.col-grid-cell-360 {
+    width: 360px;
+    display: inline-block;
+    overflow: hidden;
+}
+
 .col-grid-cell input {
     width: 100%;
 }
@@ -90,6 +96,10 @@ i {
 
 .k-select .k-icon {
     margin-left:-10px;
+}
+
+.k-dropdown {
+    width:100%;
 }
 
 .footer {
