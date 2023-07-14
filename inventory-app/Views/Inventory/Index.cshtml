@@ -9,40 +9,36 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Product/Get"
+                        url: "/Inventory/Get"
                     },
                     destroy: {
-                        url: "/Product/Delete",
+                        url: "/Inventory/Delete",
                         type: "POST"
                         },
                     update: {
-                        url: "/Product/Update",
+                        url: "/Inventory/Update",
                         type: "POST",
                         complete: function (e) {
                             $("#listView").data("kendoListView").dataSource.read();
                         }
                     },
                     create: {
-                        url: "/Product/Create",
+                        url: "/Inventory/Create",
                         type: "POST",
                         complete: function (e) {
                             $("#listView").data("kendoListView").dataSource.read();
                         }
                     }
                 },
-            pageSize: 21,
                 schema: {
                     model: {
                         id: "id",
                         fields: {
                             id: { nullable: false, editable: false },
-                            departmentId: { nullable: false },
-                            departmentCode: { nullable: true },
-                            manufacturerId: { nullable: false },
-                            manufacturerCode: { nullable: true },
-                            modelNumber: { nullable: true },
+                            productId: { nullable: false },
+                            asOfDate: { nullable: true },
                             description: { nullable: true },
-                            price: { nullable: true },
+                            quantity: { nullable: true }
                         }
                     }
                 }
@@ -59,30 +55,16 @@
     }
 
     function onEdit() {
-        var component = $("#deptId");
+        var component = $("#prodId");
         component.kendoDropDownList({
             optionLabel: "Choose...",
-            filter: "startswith",
+            filter: "contains",
             dataTextField: "text",
             dataValueField: "value",
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Product/GetDepartments"
-                    }
-                }
-            }
-        });
-        component = $("#manuId");
-        component.kendoDropDownList({
-            optionLabel: "Choose...",
-            filter: "startswith",
-            dataTextField: "text",
-            dataValueField: "value",
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/Product/GetManufacturers"
+                        url: "/Inventory/GetProducts"
                     }
                 }
             }
@@ -92,11 +74,9 @@
 
 <script type="text/x-kendo-template" id="template0">
     <div class='row'>
-        <div class='col-grid-cell-125'><span>#:departmentCode#</span></div>
-        <div class='col-grid-cell-125'><span>#:manufacturerCode#</span></div>
-        <div class='col-grid-cell-long'><span>#:modelNumber#</span></div>
-        <div class='col-grid-cell-long'><span>#:description#</span></div>
-        <div class='col-grid-cell'><span>#:price#</span></div>
+        <div class='col-grid-cell-long'><span>#:asOfDate#</span></div>
+        <div class='col-grid-cell-360'><span>#:description#</span></div>
+        <div class='col-grid-cell'><span>#:quantity#</span></div>
         <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
         <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
     </div>
@@ -104,11 +84,9 @@
 
 <script type="text/x-kendo-template" id="editTemplate0">
     <div class='row'>
-        <div class='col-grid-cell-125'><span><input type="text" class="k-textbox deptId" data-bind="value:departmentId" name="departmentId" id="deptId" /><span></div>
-        <div class='col-grid-cell-125'><input type="text" class="k-textbox manuId" data-bind="value:manufacturerId" name="manufacturerId" id="manuId" /></div>
-        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:modelNumber" name="modelNumber" /></div>
-        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:description" name="description" /></div>
-        <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:price" name="price" /></div>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:asOfDate" name="asOfDate" /></div>
+        <div class='col-grid-cell-360'><input type="text" class="k-textbox" data-bind="value:productId" name="productId" id="prodId" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:quantity" name="quantity" /></div>
         <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
         <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
     </div>
@@ -118,17 +96,15 @@
 <style>
 </style>
 
-<h2>Products</h2>
+<h2>Inventory History</h2>
 
 <a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
 <div class="divider"></div>
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
-        <div class='col-grid-cell-125'><span>Department</span></div>
-        <div class='col-grid-cell-125'><span>Manufacturer</span></div>
-        <div class='col-grid-cell-long'><span>Model Number</span></div>
-        <div class='col-grid-cell-long'><span>Description</span></div>
-        <div class='col-grid-cell'><span>Price</span></div>
+        <div class='col-grid-cell-long'><span>Date</span></div>
+        <div class='col-grid-cell-360'><span>Description</span></div>
+        <div class='col-grid-cell'><span>Quantity</span></div>
         <div class='col-grid-button'></div>
         <div class='col-grid-button'></div>
     </div>

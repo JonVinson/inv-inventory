@@ -55,19 +55,19 @@
 
 <script type="text/x-kendo-template" id="template0">
     <div class='row'>
-        <div class='col-sm-4'><span>#:name#</span></div>
-        <div class='col-sm-2'><span>#:code#</span></div>
-        <div role='button' class='col-sm-1 k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
-        <div role='button' class='col-sm-1 k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
+        <div class='col-grid-cell'><span>#:name#</span></div>
+        <div class='col-grid-cell'><span>#:code#</span></div>
+        <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
+        <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
     </div>
 </script>
 
 <script type="text/x-kendo-template" id="editTemplate0">
     <div class='row'>
-        <div class='col-sm-4'><input type="text" class="k-input-inner" data-bind="value:name" name="name" /></div>
-        <div class='col-sm-2'><input type="text" class="k-input-inner" data-bind="value:code" name="code" /></div>
-        <div role='button' class='col-sm-1 k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
-        <div role='button' class='col-sm-1 k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:name" name="name" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-input-inner" data-bind="value:code" name="code" /></div>
+        <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
+        <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
     </div>
 </script>
 }
@@ -77,8 +77,10 @@
 <div class="divider"></div>
 <div class="container grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
-        <div class='col-sm-4'><span>Name</span></div>
-        <div class='col-sm-2'><span>Code</span></div>
+        <div class='col-grid-cell'><span>Name</span></div>
+        <div class='col-grid-cell'><span>Code</span></div>
+        <div class='col-button'></div>
+        <div class='col-button'></div>
     </div>
 </div>
 <div id="listView" class="container grid-striped">
