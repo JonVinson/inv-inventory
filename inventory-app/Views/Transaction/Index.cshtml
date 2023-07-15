@@ -1,0 +1,166 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var listView = $("#listView").kendoListView({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Transaction/Get"
+                    },
+                    destroy: {
+                        url: "/Transaction/Delete",
+                        type: "POST"
+                        },
+                    update: {
+                        url: "/Transaction/Update",
+                        type: "POST",
+                        complete: function (e) {
+                            $("#listView").data("kendoListView").dataSource.read();
+                        }
+                    },
+                    create: {
+                        url: "/Transaction/Create",
+                        type: "POST",
+                        complete: function (e) {
+                            $("#listView").data("kendoListView").dataSource.read();
+                        }
+                    },
+                    parameterMap: function (data, type) {
+                        if (true) {
+                            data.date = kendo.toString(data.date, "yyyy-MM-dd");
+                            return data;
+                        }
+                    }
+                },
+            pageSize: 21,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { nullable: false, editable: false },
+                            date: { nullable: false, type: "Date" },
+                            transactionType: { nullable: false },
+                            productId: { nullable: false },
+                            productName: { nullable: true },
+                            companyId: { nullable: false },
+                            companyName: { nullable: true },
+                            quantity: { nullable: true },
+                            total: { nullable: true },
+                            price: { nullable: true }
+                        }
+                    }
+                }
+            },
+            template: kendo.template($("#template0").html()),
+            editTemplate: kendo.template($("#editTemplate0").html()),
+            edit: onEdit
+        });
+    });
+
+    function addRecord(e) {
+        var listView = $("#listView").data("kendoListView");
+        listView.add();
+    }
+
+    function onEdit() {
+        var component = $("#prodId");
+        component.kendoDropDownList({
+            optionLabel: "Choose...",
+            filter: "startswith",
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Transaction/GetProducts"
+                    }
+                }
+            }
+        });
+
+        component = $("#comId");
+        component.kendoDropDownList({
+            optionLabel: "Choose...",
+            filter: "startswith",
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Transaction/GetCompanies"
+                    }
+                }
+            }
+        });
+    }
+
+    var transTypeData = [
+        { value: 1, text: "Purchase" },
+        { value: 2, text: "Sale" },
+        { value: 3, text: "Return Purchase" },
+        { value: 4, text: "Return Sale" }
+    ];
+
+    var transTypeNames = ["Unknown", "Purchase", "Sale", "Return Purchase", "Return Sale"];
+</script>
+
+<script type="text/x-kendo-template" id="template0">
+    <div class='row'>
+        <div class='col-grid-cell-long'><span>#:kendo.toString(date, 'd')#</span></div>
+        <div class='col-grid-cell'><span>#:transTypeNames[transactionType]#</span></div>
+        <div class='col-grid-cell-200'><span>#:productName#</span></div>
+        <div class='col-grid-cell-long'><span>#:companyName#</span></div>
+        <div class='col-grid-cell'><span>#:quantity#</span></div>
+        <div class='col-grid-cell'><span>#:price#</span></div>
+        <div class='col-grid-cell'><span>#:total#</span></div>
+        <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
+        <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
+    </div>
+</script>
+
+<script type="text/x-kendo-template" id="editTemplate0">
+    <div class='row'>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-role="datepicker" data-bind="value:date" data-type="date" name="date" id="date" /></div>
+        <div class='col-grid-cell'>
+            <input type="text" class="k-textbox" data-role="dropdownlist" data-option-label="Choose..." data-bind="value:transactionType" data-type="number" data-source="transTypeData" data-text-field="text" data-value-field="value" name="transactionType" id="transactionType" />
+        </div>
+        <div class='col-grid-cell-200'><input type="text" class="k-textbox" data-bind="value:productId" name="productId" id="prodId" /></div>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:companyId" name="companyId" id="comId" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:quantity" name="quantity" /></div>
+        <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:price" name="price" /></div>
+        <div class='col-grid-cell'><span>#:total#</span></div>
+        <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
+    <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
+    </div>
+</script>
+}
+
+<style>
+</style>
+
+<h2>Transactions</h2>
+
+<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div class="divider"></div>
+<div class="grid-header k-widget k-listview k-listview-bordered">
+    <div class='row'>
+        <div class='col-grid-cell-long'><span>Date</span></div>
+        <div class='col-grid-cell'><span>Type</span></div>
+        <div class='col-grid-cell-200'><span>Product</span></div>
+        <div class='col-grid-cell-long'><span>Company</span></div>
+        <div class='col-grid-cell'><span>Quantity</span></div>
+        <div class='col-grid-cell'><span>Price</span></div>
+        <div class='col-grid-cell'><span>Total</span></div>
+        <div class='col-grid-button'></div>
+        <div class='col-grid-button'></div>
+    </div>
+</div>
+
+<div id="listView" class="container grid-striped">
+</div>
+
+

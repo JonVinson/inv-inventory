@@ -32,6 +32,7 @@ public partial class Transaction
 
 public enum TransactionType
 {
+    Unknown,
     Purchase,
     Sale,
     PurchaseReturn,

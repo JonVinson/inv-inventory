@@ -28,6 +28,12 @@
                         complete: function (e) {
                             $("#listView").data("kendoListView").dataSource.read();
                         }
+                    },
+                    parameterMap: function (data, type) {
+                        if (true) {
+                            data.asOfDate = kendo.toString(data.asOfDate, "yyyy-MM-dd");
+                            return data;
+                        }
                     }
                 },
                 schema: {
@@ -36,7 +42,7 @@
                         fields: {
                             id: { nullable: false, editable: false },
                             productId: { nullable: false },
-                            asOfDate: { nullable: true },
+                            asOfDate: { nullable: false, type: "Date" },
                             description: { nullable: true },
                             quantity: { nullable: true }
                         }
@@ -74,7 +80,7 @@
 
 <script type="text/x-kendo-template" id="template0">
     <div class='row'>
-        <div class='col-grid-cell-long'><span>#:asOfDate#</span></div>
+        <div class='col-grid-cell-long'><span>#:kendo.toString(asOfDate,'M/d/yyyy')#</span></div>
         <div class='col-grid-cell-360'><span>#:description#</span></div>
         <div class='col-grid-cell'><span>#:quantity#</span></div>
         <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
@@ -84,7 +90,7 @@
 
 <script type="text/x-kendo-template" id="editTemplate0">
     <div class='row'>
-        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:asOfDate" name="asOfDate" /></div>
+        <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-role='datepicker' data-type="date" data-bind="value:asOfDate" name="asOfDate" id="asOfDate"/></div>
         <div class='col-grid-cell-360'><input type="text" class="k-textbox" data-bind="value:productId" name="productId" id="prodId" /></div>
         <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:quantity" name="quantity" /></div>
         <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>

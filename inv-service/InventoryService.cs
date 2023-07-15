@@ -1,5 +1,5 @@
 ﻿using inventory_data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
@@ -125,6 +125,12 @@ namespace inv_service
         #endregion
 
         #region Customers
+        public IQueryable<Company> GetCompanies()
+        {
+            return _context.Companies
+                .OrderBy(c => c.Name);
+        }
+
         public IQueryable<Company> GetCustomers()
         {
             return _context.Companies
@@ -307,16 +313,7 @@ namespace inv_service
         #region InventoryItems
         public IQueryable<InventoryItemViewModel> GetInventoryItems(DateTime? startDate = null, DateTime? endDate = null)
         {
-            var query = _context.PhysicalInventory
-                .Select(p => new InventoryItemViewModel
-                {
-                    Id = p.Id,
-                    ProductId = p.ProductId,
-                    Description = p.Product.Department.Code + " - " + p.Product.Manufacturer.Code
-                        + " - " + p.Product.ModelNumber + " - " + p.Product.Description,
-                    Quantity = p.Quantity,
-                    AsOfDate = p.AsOfDate
-                });
+            var query = _context.PhysicalInventory as IQueryable<InventoryItem>;
 
             if (startDate != null)
             {
@@ -328,7 +325,16 @@ namespace inv_service
                 query = query.Where(p => p.AsOfDate <= endDate);
             }
 
-            return query.OrderBy(p => p.AsOfDate);
+            return query.Select(p => new InventoryItemViewModel
+            {
+                Id = p.Id,
+                ProductId = p.ProductId,
+                Description = p.Product.Department.Code + " - " + p.Product.Manufacturer.Code
+                    + " - " + p.Product.ModelNumber + " - " + p.Product.Description,
+                Quantity = p.Quantity,
+                AsOfDate = p.AsOfDate
+            })
+            .OrderBy(p => p.AsOfDate);
         }
 
         public int CreateInventoryItem(InventoryItemViewModel model)
@@ -367,6 +373,87 @@ namespace inv_service
                 inventoryItem.ProductId = model.ProductId;
                 inventoryItem.AsOfDate = model.AsOfDate;
                 inventoryItem.Quantity = model.Quantity;
+                _context.SaveChanges();
+            }
+        }
+        #endregion
+
+        #region Transactions
+        public IQueryable<TransactionViewModel> GetTransactions(DateTime? startDate = null, DateTime? endDate = null)
+        {
+            var query = _context.Transactions
+                .Select(p => new TransactionViewModel
+                {
+                    Id = p.Id,
+                    Date = p.Date,
+                    TransactionType = p.TransactionType,
+                    ProductId = p.ProductId,
+                    ProductName = p.Product.Department.Code + " - " + p.Product.Manufacturer.Code
+                        + " - " + p.Product.ModelNumber + " - " + p.Product.Description,
+                    CompanyId = p.CompanyId,
+                    CompanyName = p.Company == null ? null : p.Company.Code + " - " + p.Company.Name,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    Note = p.Note
+                });
+
+            if (startDate != null)
+            {
+                query = query.Where(p => p.Date >= startDate);
+            }
+
+            if (endDate != null)
+            {
+                query = query.Where(p => p.Date <= endDate);
+            }
+
+            return query.OrderBy(p => p.Date);
+        }
+
+        public int CreateTransaction(TransactionViewModel model)
+        {
+            var transaction = new Transaction
+            {
+                Date = model.Date,
+                TransactionType = model.TransactionType,
+                ProductId = model.ProductId,
+                CompanyId = model.CompanyId,
+                Quantity = model.Quantity,
+                Price = model.Price.GetValueOrDefault(),
+                Note = model.Note
+            };
+
+            _context.Transactions.Add(transaction);
+            _context.SaveChanges();
+
+            return transaction.Id;
+        }
+
+        public void DeleteTransaction(int id)
+        {
+            var transaction = _context.Transactions.Find(id);
+
+            if (transaction != null)
+            {
+                _context.Transactions.Remove(transaction);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateTransaction(TransactionViewModel model)
+        {
+            var transaction = _context.Transactions.Find(model.Id);
+
+            if (transaction != null)
+            {
+                transaction.Date = model.Date;
+                transaction.TransactionType = model.TransactionType;
+                transaction.ProductId = model.ProductId;
+                transaction.CompanyId = model.CompanyId;
+                transaction.Quantity = model.Quantity;
+                transaction.Price = model.Price.GetValueOrDefault();
+                transaction.Note = model.Note;
                 _context.SaveChanges();
             }
         }
