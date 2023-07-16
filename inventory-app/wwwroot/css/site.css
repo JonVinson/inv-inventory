@@ -73,6 +73,12 @@ i {
     overflow: hidden;
 }
 
+.col-grid-cell-200 {
+    width: 200px;
+    display: inline-block;
+    overflow: hidden;
+}
+
 .col-grid-cell-360 {
     width: 360px;
     display: inline-block;
@@ -95,7 +101,7 @@ i {
 }
 
 .k-select .k-icon {
-    margin-left:-10px;
+    margin-left:-7.5px;
 }
 
 .k-dropdown {

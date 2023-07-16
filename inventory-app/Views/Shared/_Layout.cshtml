@@ -40,6 +40,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Index">Inventory History</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Transaction" asp-action="Index">Transactions</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
@@ -72,6 +75,9 @@
     <script src="~/js/kendo/kendo.virtuallist.min.js"></script>
     <script src="~/js/kendo/kendo.dropdownlist.min.js"></script>
     <script src="~/js/kendo/kendo.listview.min.js"></script>
+    <script src="~/js/kendo/kendo.dateinput.min.js"></script>
+    <script src="~/js/kendo/kendo.calendar.min.js"></script>
+    <script src="~/js/kendo/kendo.datepicker.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
