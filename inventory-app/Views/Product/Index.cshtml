@@ -4,12 +4,49 @@
 
 @section Scripts {
 <script>
+    var deptSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "/Product/GetDepartments"
+            }
+        }
+    });
+
+    var manuSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "/Product/GetManufacturers"
+            }
+        }
+    });
+
+    var viewModel = kendo.observable({
+        selectedDept: 0,
+        selectedManu: 0,
+        searchString: "",
+        onChange: function () {
+            console.log("event :: change");
+            $("#listView").data("kendoListView").dataSource.read();
+        },
+        departments: deptSource,
+        manufacturers: manuSource
+    });
+
+    kendo.bind($("#filter"), viewModel);
+
     $(document).ready(function () {
         var listView = $("#listView").kendoListView({
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Product/Get"
+                        url: "/Product/Get",
+                        data: () => {
+                            return {
+                                deptId: viewModel.selectedDept, 
+                                manuId: viewModel.selectedManu, 
+                                name: viewModel.searchString
+                            };
+                        }
                     },
                     destroy: {
                         url: "/Product/Delete",
@@ -30,7 +67,6 @@
                         }
                     }
                 },
-            pageSize: 21,
                 schema: {
                     model: {
                         id: "id",
@@ -48,45 +84,28 @@
                 }
             },
             template: kendo.template($("#template0").html()),
-            editTemplate: kendo.template($("#editTemplate0").html()),
-            edit: onEdit
+            editTemplate: kendo.template($("#editTemplate0").html())
+        });
+
+        $("#deptIdFilter").data("kendoDropDownList").bind("change", (e) => {
+            console.log("change: deptId = ", viewModel.selectedDept);
+            $("#listView").data("kendoListView").dataSource.read();
+        });
+
+        $("#manuIdFilter").data("kendoDropDownList").bind("change", (e) => {
+            console.log("change: manuId = ", viewModel.selectedDept);
+            $("#listView").data("kendoListView").dataSource.read();
+        });
+
+        $("#nameFilter").data("kendoTextBox").bind("change", (e) => {
+            console.log("change: name = ", viewModel.searchString);
+            $("#listView").data("kendoListView").dataSource.read();
         });
     });
 
     function addRecord(e) {
         var listView = $("#listView").data("kendoListView");
         listView.add();
-    }
-
-    function onEdit() {
-        var component = $("#deptId");
-        component.kendoDropDownList({
-            optionLabel: "Choose...",
-            filter: "startswith",
-            dataTextField: "text",
-            dataValueField: "value",
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/Product/GetDepartments"
-                    }
-                }
-            }
-        });
-        component = $("#manuId");
-        component.kendoDropDownList({
-            optionLabel: "Choose...",
-            filter: "startswith",
-            dataTextField: "text",
-            dataValueField: "value",
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/Product/GetManufacturers"
-                    }
-                }
-            }
-        });
     }
 </script>
 
@@ -104,8 +123,8 @@
 
 <script type="text/x-kendo-template" id="editTemplate0">
     <div class='row'>
-        <div class='col-grid-cell-125'><span><input type="text" class="k-textbox deptId" data-bind="value:departmentId" name="departmentId" id="deptId" /><span></div>
-        <div class='col-grid-cell-125'><input type="text" class="k-textbox manuId" data-bind="value:manufacturerId" name="manufacturerId" id="manuId" /></div>
+        <div class='col-grid-cell-125'><span><input type="text" class="k-textbox deptId" data-bind="value:departmentId" data-role="dropdownlist" data-source="deptSource" data-text-field="text" data-value-field="value" name="departmentId" id="deptId" /><span></div>
+        <div class='col-grid-cell-125'><input type="text" class="k-textbox manuId" data-bind="value:manufacturerId" data-role="dropdownlist" data-source="manuSource" data-text-field="text" data-value-field="value" name="manufacturerId" id="manuId" /></div>
         <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:modelNumber" name="modelNumber" /></div>
         <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:description" name="description" /></div>
         <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:price" name="price" /></div>
@@ -120,7 +139,16 @@
 
 <h2>Products</h2>
 
-<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div>
+    <a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+</div>
+
+<div id="filter">
+    <input style="display:inline-block;max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedDept, source: departments" data-text-field="text" data-value-field="value" data-option-label="All Departments" id="deptIdFilter" />
+    <input style="display:inline-block;max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedManu, source: manufacturers" data-text-field="text" data-value-field="value" data-option-label="All Manufacturers" id="manuIdFilter" />
+    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: searchString" id="nameFilter" />
+</div>
+
 <div class="divider"></div>
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
@@ -136,5 +164,6 @@
 
 <div id="listView" class="container grid-striped">
 </div>
+
 
 
