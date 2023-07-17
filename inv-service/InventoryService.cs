@@ -240,7 +240,7 @@ namespace inv_service
         #endregion
 
         #region Products
-        public IQueryable<ProductViewModel> GetProducts(string? filter = null)
+        public IQueryable<ProductViewModel> GetProducts(int? deptId = null, int? manuId = null, string? name = null)
         {
             var query = _context.Products
                 .Select(p => new ProductViewModel
@@ -255,9 +255,19 @@ namespace inv_service
                     Price = p.Price
                 });
 
-            if (filter != null)
+            if ((deptId ?? 0) != 0)
             {
-                query = query.Where(p => p.Description.Contains(filter));
+                query = query.Where(p => p.DepartmentId == deptId);
+            }
+
+            if ((manuId ?? 0) != 0)
+            {
+                query = query.Where(p => p.ManufacturerId == manuId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(p => p.Description.Contains(name) || p.ModelNumber.Contains(name));
             }
 
             return query.OrderBy(p => p.DepartmentCode)
