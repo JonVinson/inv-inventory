@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using System.Web;
 
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using inv_service;
+using inventory_service;
 using inventory_app.Models;
 
 namespace inventory_app.Controllers

@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Scripts {
+<script>
+    var viewModel = kendo.observable({
+        startDate: null,
+        endDate: null,
+        onChange: function (e) {
+            console.log("event :: change");
+            $("#listView").data("kendoListView").dataSource.read();
+        }
+    });
+
+    kendo.bind($("#filter"), viewModel);
+
+    $(document).ready(function () {
+        var listView = $("#listView").kendoListView({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/Income/Get",
+                        data: () => {
+                            return {
+                                startDate: kendo.toString(viewModel.startDate, "yyyy-MM-dd"),
+                                endDate: kendo.toString(viewModel.endDate, "yyyy-MM-dd")
+                            };
+                        }
+                    }
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            department: { nullable: false },
+                            revenue: { nullable: false },
+                            cost: { nullable: false },
+                            netIncome: { nullable: false }
+                        }
+                    }
+                }
+            },
+            template: kendo.template($("#template0").html())
+        });
+    });
+
+    function addRecord(e) {
+        var listView = $("#listView").data("kendoListView");
+        listView.add();
+    }
+</script>
+
+<script type="text/x-kendo-template" id="template0">
+    <div class='row'>
+        <div class='col-grid-cell-125'><span>#:department#</span></div>
+        <div class='col-grid-cell-long'><span>#:revenue#</span></div>
+        <div class='col-grid-cell-long'><span>#:cost#</span></div>
+        <div class='col-grid-cell-long'><span>#:netIncome#</span></div>
+    </div>
+</script>
+}
+
+<style>
+</style>
+
+<h2>Income Report</h2>
+
+<div id="filter">
+    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox" data-role="datepicker" 
+        data-bind="value: startDate, events: { change: onChange }" data-type="date" id="startDate" />
+    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox" data-role="datepicker"
+           data-bind="value: endDate, events: { change: onChange }" data-type="date" id="endDate" />
+</div>
+
+<div class="divider"></div>
+<div class="grid-header k-widget k-listview k-listview-bordered">
+    <div class='row'>
+        <div class='col-grid-cell-125'><span>Department</span></div>
+        <div class='col-grid-cell-long'><span>Revenue</span></div>
+        <div class='col-grid-cell-long'><span>Costs</span></div>
+        <div class='col-grid-cell-long'><span>Net Income</span></div>
+    </div>
+</div>
+
+<div id="listView" class="container grid-striped">
+</div>
+
+
+

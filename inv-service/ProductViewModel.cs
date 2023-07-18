@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using inventory_data;
 
-namespace inv_service
+namespace inventory_service
 {
     public class ProductViewModel : Product, IComparable<ProductViewModel>
     {

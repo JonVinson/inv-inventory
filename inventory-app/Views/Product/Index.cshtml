@@ -140,8 +140,10 @@
 <h2>Products</h2>
 
 <div>
-    <a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+    <button id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</button>
 </div>
+
+<div class="divider"></div>
 
 <div id="filter">
     <input style="display:inline-block;max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedDept, source: departments" data-text-field="text" data-value-field="value" data-option-label="All Departments" id="deptIdFilter" />
@@ -150,6 +152,7 @@
 </div>
 
 <div class="divider"></div>
+
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
         <div class='col-grid-cell-125'><span>Department</span></div>
