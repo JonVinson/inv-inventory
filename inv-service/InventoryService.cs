@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 
-namespace inv_service
+namespace inventory_service
 {
     public class InventoryService
     {
@@ -467,6 +467,63 @@ namespace inv_service
                 _context.SaveChanges();
             }
         }
+        #endregion
+
+        #region Reports
+
+        public IEnumerable<IncomeViewModel> IncomeReport(DateTime? startDate, DateTime? endDate)
+        {
+            var purchases = _context.Transactions.Where(t => t.TransactionType == TransactionType.Purchase);
+            var sales = _context.Transactions.Where(t => t.TransactionType == TransactionType.Sale);
+
+            if (startDate != null)
+            {
+                purchases = purchases.Where(t => t.Date >= startDate);
+                sales = sales.Where(t => t.Date >= startDate);
+            }
+
+            if (endDate != null)
+            {
+                purchases = purchases.Where(t => t.Date <= endDate);
+                sales = sales.Where(t => t.Date <= endDate);
+            }
+
+            var totals = _context.Departments.ToDictionary(d => d.Name!, d => new IncomeViewModel { Department = d.Name });
+
+            var totalPurchases = purchases.GroupBy(t => t.Product.Department.Name,
+                (k, g) => new { Department = k, Total = g.Sum(t => t.Price * t.Quantity) });
+
+            foreach (var item in totalPurchases)
+            {
+                totals[item.Department!].Cost = item.Total;
+            }
+
+            var totalSales = sales.GroupBy(t => t.Product.Department.Name,
+                (k, g) => new { Department = k, Total = g.Sum(t => t.Price * t.Quantity) });
+
+            foreach (var item in totalSales)
+            {
+                totals[item.Department!].Revenue = item.Total;
+            }
+
+            var totalIncome = totals.Values
+                .OrderBy(i => i.Department)
+                .ToList();
+
+            var grandTotalPurchases = purchases.Sum(t => t.Quantity * t.Price);
+            var grandTotalSales = sales.Sum(t => t.Quantity * t.Price);
+
+            totalIncome.Add(new IncomeViewModel
+            {
+                Department = "Total",
+                Revenue = grandTotalSales,
+                Cost = grandTotalPurchases,
+                NetIncome = grandTotalSales - grandTotalPurchases
+            });
+
+            return totalIncome;
+        }
+
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using inventory_data;
-using inv_service;
+using inventory_service;
 
 var builder = WebApplication.CreateBuilder(args);
 

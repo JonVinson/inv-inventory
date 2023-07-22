@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace inv_service
+namespace inventory_service
 {
     public class InventoryItemViewModel
     {
