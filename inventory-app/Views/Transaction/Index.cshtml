@@ -4,12 +4,48 @@
 
 @section Scripts {
 <script>
+
+    var transTypeData = [
+        { value: 1, text: "Purchase" },
+        { value: 2, text: "Sale" },
+        { value: 3, text: "Return Purchase" },
+        { value: 4, text: "Return Sale" }
+    ];
+
+    var typeSource = new kendo.data.DataSource({
+        data: transTypeData
+    });
+
+    var viewModel = kendo.observable({
+        startDate: null,
+        endDate: null,
+        transactionType: 0,
+        product: '',
+        company: '',
+        onChange: function (e) {
+            console.log("event :: change");
+            refreshData();
+        },
+        transTypes: typeSource
+    });
+
+    kendo.bind($("#filter"), viewModel);
+    
     $(document).ready(function () {
         var listView = $("#listView").kendoListView({
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Transaction/Get"
+                        url: "/Transaction/Get",
+                        data: () => {
+                            return {
+                                startDate: kendo.toString(viewModel.startDate, "yyyy-MM-dd"),
+                                endDate: kendo.toString(viewModel.endDate, "yyyy-MM-dd"),
+                                transType: viewModel.transactionType,
+                                product: viewModel.product,
+                                company: viewModel.company,
+                            };
+                        }
                     },
                     destroy: {
                         url: "/Transaction/Delete",
@@ -36,7 +72,6 @@
                         }
                     }
                 },
-            pageSize: 21,
                 schema: {
                     model: {
                         id: "id",
@@ -59,6 +94,8 @@
             editTemplate: kendo.template($("#editTemplate0").html()),
             edit: onEdit
         });
+
+        $("#typeFilter").data("kendoDropDownList").bind("change", refreshData);
     });
 
     function addRecord(e) {
@@ -97,13 +134,6 @@
             }
         });
     }
-
-    var transTypeData = [
-        { value: 1, text: "Purchase" },
-        { value: 2, text: "Sale" },
-        { value: 3, text: "Return Purchase" },
-        { value: 4, text: "Return Sale" }
-    ];
 
     var transTypeNames = ["Unknown", "Purchase", "Sale", "Return Purchase", "Return Sale"];
 </script>
@@ -144,7 +174,19 @@
 
 <h2>Transactions</h2>
 
-<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div>
+    <a id="add-new-button" style="max-width:150px" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+    <div style="display:inline-block;white-space:nowrap" id="filter">
+        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: startDate, events: { change: onChange }" data-type="date" id="startDate" placeholder="From..." />
+        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: endDate, events: { change: onChange }" data-type="date" id="endDate" placeholder="To..." />
+        <input style="display:inline-block;max-width:165px" type="text" class="k-textbox" data-role="dropdownlist" data-option-label="Type..." data-bind="value:transactionType, source: transTypes" data-type="number" data-text-field="text" data-value-field="value" id="typeFilter" />
+        <input style="display:inline-block;max-width:200px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: product, events: { change: onChange }" id="prodFilter" placeholder="Product..." />
+        <input style="display:inline-block;max-width:200px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: company, events: { change: onChange }" id="compFilter" placeholder="Company..."/>
+    </div>
+</div>
+
 <div class="divider"></div>
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>

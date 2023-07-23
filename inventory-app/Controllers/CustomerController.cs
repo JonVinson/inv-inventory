@@ -26,11 +26,11 @@ namespace inventory_app.Controllers
             return View();
         }
 
-        public JsonResult Get()
+        public JsonResult Get(string? searchString)
         {
             try
             {
-                var suppliers = _inventoryService.GetCustomers();
+                var suppliers = _inventoryService.GetCustomers(searchString!);
                 return Json(suppliers);
             }
             catch (Exception ex)

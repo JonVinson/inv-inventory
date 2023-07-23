@@ -26,11 +26,11 @@ namespace inventory_app.Controllers
             return View();
         }
 
-        public JsonResult Get()
+        public JsonResult Get(DateTime? startDate, DateTime? endDate, string product)
         {
             try
             {
-                var items = _inventoryService.GetInventoryItems();
+                var items = _inventoryService.GetInventoryItems(startDate, endDate, product);
                 return Json(items);
             }
             catch (Exception ex)
