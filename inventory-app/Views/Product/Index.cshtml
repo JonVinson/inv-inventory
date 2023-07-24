@@ -84,7 +84,8 @@
                 }
             },
             template: kendo.template($("#template0").html()),
-            editTemplate: kendo.template($("#editTemplate0").html())
+            editTemplate: kendo.template($("#editTemplate0").html()),
+            remove: (e) => confirmDelete(e, "product")
         });
 
         $("#deptIdFilter").data("kendoDropDownList").bind("change", (e) => {

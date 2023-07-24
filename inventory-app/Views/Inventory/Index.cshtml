@@ -70,7 +70,8 @@
             },
             template: kendo.template($("#template0").html()),
             editTemplate: kendo.template($("#editTemplate0").html()),
-            edit: onEdit
+            edit: onEdit,
+            remove: (e) => confirmDelete(e, "inventory record")
         });
     });
 
