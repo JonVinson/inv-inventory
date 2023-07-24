@@ -61,10 +61,17 @@ namespace inventory_service
         #endregion
 
         #region Suppliers
-        public IQueryable<Company> GetSuppliers()
+        public IQueryable<Company> GetSuppliers(string? searchString)
         {
-            return _context.Companies
-                .Where(c => c.CompanyType == CompanyType.Supplier)
+            var query = _context.Companies
+                .Where(c => c.CompanyType == CompanyType.Supplier);
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(c => c.Name!.Contains(searchString));
+            }
+
+            return query
                 .OrderBy(s => s.Name);
         }
 
@@ -131,11 +138,18 @@ namespace inventory_service
                 .OrderBy(c => c.Name);
         }
 
-        public IQueryable<Company> GetCustomers()
+        public IQueryable<Company> GetCustomers(string? searchString = null)
         {
-            return _context.Companies
-                .Where(c => c.CompanyType == CompanyType.Customer)
-                .OrderBy(c => c.Name);
+            var query = _context.Companies
+                .Where(c => c.CompanyType == CompanyType.Customer);
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(c => c.Name!.Contains(searchString));
+            }
+
+            return query
+                .OrderBy(s => s.Name);
         }
 
         public int CreateCustomer(Company model)
@@ -195,9 +209,16 @@ namespace inventory_service
         #endregion
 
         #region Manufacturers
-        public IQueryable<Manufacturer> GetManufacturers()
+        public IQueryable<Manufacturer> GetManufacturers(string? searchString = null)
         {
-            return _context.Manufacturers.OrderBy(c => c.Name);
+            var query = _context.Manufacturers as IQueryable<Manufacturer>;
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                query = query.Where(m => m.Name!.Contains(searchString) || m.Code!.Contains(searchString));
+            }
+
+            return query.OrderBy(c => c.Name);
         }
 
         public int CreateManufacturer(Manufacturer model)
@@ -321,7 +342,7 @@ namespace inventory_service
         #endregion
 
         #region InventoryItems
-        public IQueryable<InventoryItemViewModel> GetInventoryItems(DateTime? startDate = null, DateTime? endDate = null)
+        public IQueryable<InventoryItemViewModel> GetInventoryItems(DateTime? startDate = null, DateTime? endDate = null, string? product = null)
         {
             var query = _context.PhysicalInventory as IQueryable<InventoryItem>;
 
@@ -335,7 +356,7 @@ namespace inventory_service
                 query = query.Where(p => p.AsOfDate <= endDate);
             }
 
-            return query.Select(p => new InventoryItemViewModel
+            var selection = query.Select(p => new InventoryItemViewModel
             {
                 Id = p.Id,
                 ProductId = p.ProductId,
@@ -343,8 +364,15 @@ namespace inventory_service
                     + " - " + p.Product.ModelNumber + " - " + p.Product.Description,
                 Quantity = p.Quantity,
                 AsOfDate = p.AsOfDate
-            })
-            .OrderBy(p => p.AsOfDate);
+            });
+
+            if (!string.IsNullOrWhiteSpace(product))
+            {
+                selection = selection.Where(p => p.Description!.Contains(product));
+            }
+
+            return selection
+                .OrderBy(p => p.AsOfDate);
         }
 
         public int CreateInventoryItem(InventoryItemViewModel model)
@@ -389,7 +417,7 @@ namespace inventory_service
         #endregion
 
         #region Transactions
-        public IQueryable<TransactionViewModel> GetTransactions(DateTime? startDate = null, DateTime? endDate = null)
+        public IQueryable<TransactionViewModel> GetTransactions(DateTime? startDate = null, DateTime? endDate = null, TransactionType? transType = null, string? product = null, string? company = null)
         {
             var query = _context.Transactions
                 .Select(p => new TransactionViewModel
@@ -415,6 +443,21 @@ namespace inventory_service
             if (endDate != null)
             {
                 query = query.Where(p => p.Date <= endDate);
+            }
+
+            if (transType != null && transType != TransactionType.Unknown)
+            {
+                query = query.Where(p => p.TransactionType == transType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(product))
+            {
+                query = query.Where(p => p.ProductName!.Contains(product));
+            }
+
+            if (!string.IsNullOrWhiteSpace(company))
+            {
+                query = query.Where(p => p.CompanyName!.Contains(company));
             }
 
             return query.OrderBy(p => p.Date);

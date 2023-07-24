@@ -4,12 +4,27 @@
 
 @section Scripts {
 <script>
+    var viewModel = kendo.observable({
+        searchString: "",
+        onChange: function () {
+            console.log("event :: change");
+            $("#listView").data("kendoListView").dataSource.read();
+        }
+    });
+
+    kendo.bind($("#filter"), viewModel);
+
     $(document).ready(function () {
         var listView = $("#listView").kendoListView({
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Supplier/Get"
+                        url: "/Supplier/Get",
+                        data: () => {
+                            return {
+                                searchString: viewModel.searchString
+                            };
+                        }
                     },
                     destroy: {
                         url: "/Supplier/Delete",
@@ -50,8 +65,12 @@
                 }
             },
             template: kendo.template($("#template0").html()),
-            editTemplate: kendo.template($("#editTemplate0").html()),
-            dataBound: onDataBound
+            editTemplate: kendo.template($("#editTemplate0").html())
+        });
+
+        $("#nameFilter").data("kendoTextBox").bind("change", (e) => {
+            console.log("change: name = ", viewModel.searchString);
+            $("#listView").data("kendoListView").dataSource.read();
         });
     });
 
@@ -59,11 +78,6 @@
         var listView = $("#listView").data("kendoListView");
         listView.add();
         e.preventDefault();
-    }
-
-    function onDataBound() {
-        console.log("dataBound");
-        //$(".k-listview-content").prepend("<div class='row'><div class='col-grid-cell'><span>Name</span></div><div class='col-grid-cell'><span>code</span></div></div>");
     }
 </script>
 
@@ -107,7 +121,11 @@
 
 <h2>Suppliers</h2>
 
-<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div id="filter">
+    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: searchString" id="nameFilter" />
+    <a id="add-new-button" style="display:inline-block;float:right" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+</div>
+
 <div class="divider"></div>
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>

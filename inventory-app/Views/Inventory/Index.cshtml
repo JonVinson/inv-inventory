@@ -4,12 +4,31 @@
 
 @section Scripts {
 <script>
+    var viewModel = kendo.observable({
+        startDate: null,
+        endDate: null,
+        product: '',
+        onChange: function (e) {
+            console.log("event :: change");
+            refreshData();
+        }
+    });
+
+    kendo.bind($("#filter"), viewModel);
+
     $(document).ready(function () {
         var listView = $("#listView").kendoListView({
             dataSource: {
                 transport: {
                     read: {
-                        url: "/Inventory/Get"
+                        url: "/Inventory/Get",
+                        data: () => {
+                            return {
+                                startDate: kendo.toString(viewModel.startDate, "yyyy-MM-dd"),
+                                endDate: kendo.toString(viewModel.endDate, "yyyy-MM-dd"),
+                                product: viewModel.product
+                            };
+                        }
                     },
                     destroy: {
                         url: "/Inventory/Delete",
@@ -104,8 +123,19 @@
 
 <h2>Inventory History</h2>
 
-<a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div>
+    <a id="add-new-button" style="max-width:150px" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+    <div style="display:inline-block;white-space:nowrap" id="filter">
+        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: startDate, events: { change: onChange }" data-type="date" id="startDate" placeholder="From..." />
+        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: endDate, events: { change: onChange }" data-type="date" id="endDate" placeholder="To..." />
+        <input style="display:inline-block;max-width:200px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: product, events: { change: onChange }" id="prodFilter" placeholder="Search for product..." />
+    </div>
+</div>
+
 <div class="divider"></div>
+
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
         <div class='col-grid-cell-long'><span>Date</span></div>
