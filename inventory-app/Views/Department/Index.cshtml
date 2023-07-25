@@ -37,7 +37,8 @@
             },
             template: kendo.template($("#template0").html()),
             editTemplate: kendo.template($("#editTemplate0").html()),
-            dataBound: onDataBound
+            dataBound: onDataBound,
+            remove: (e) => confirmDelete(e, "department")
         });
     });
 
