@@ -122,10 +122,13 @@
 
 <h2>Suppliers</h2>
 
-<div id="filter">
-    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: searchString" id="nameFilter" />
-    <a id="add-new-button" style="display:inline-block;float:right" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+<div>
+    <a id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
+    <div class="filter-bar" id="filter">
+        <input style="width:400px" type="text" class="k-textbox" data-role="textbox" data-bind="value: searchString" placeholder="Search for supplier..." id="nameFilter" />
+    </div>
 </div>
+
 
 <div class="divider"></div>
 <div class="grid-header k-widget k-listview k-listview-bordered">

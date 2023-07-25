@@ -65,14 +65,17 @@
 
 <h2>Income Report</h2>
 
-<div id="filter">
-    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox" data-role="datepicker" 
-        data-bind="value: startDate, events: { change: onChange }" data-type="date" id="startDate" />
-    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox" data-role="datepicker"
-           data-bind="value: endDate, events: { change: onChange }" data-type="date" id="endDate" />
+<div style="height:30px">
+    <div class="filter-bar" id="filter">
+        <input style="width:200px" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: startDate, events: { change: onChange }" data-type="date" placeholder="From..." id="startDate" />
+        <input style="width:200px" type="text" class="k-textbox" data-role="datepicker"
+               data-bind="value: endDate, events: { change: onChange }" data-type="date" placeholder="To..." id="endDate" />
+    </div>
 </div>
 
 <div class="divider"></div>
+
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
         <div class='col-grid-cell-125'><span>Department</span></div>

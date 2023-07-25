@@ -140,17 +140,16 @@
 
 <h2>Products</h2>
 
+
 <div>
     <button id="add-new-button" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</button>
+    <div class="filter-bar" id="filter">
+        <input style="max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedDept, source: departments" data-text-field="text" data-value-field="value" data-option-label="All Departments" id="deptIdFilter" />
+        <input style="max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedManu, source: manufacturers" data-text-field="text" data-value-field="value" data-option-label="All Manufacturers" id="manuIdFilter" />
+        <input style="max-width:350px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: searchString" id="nameFilter" placeholder="Search for product..."/>
+    </div>
 </div>
 
-<div class="divider"></div>
-
-<div id="filter">
-    <input style="display:inline-block;max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedDept, source: departments" data-text-field="text" data-value-field="value" data-option-label="All Departments" id="deptIdFilter" />
-    <input style="display:inline-block;max-width:175px" type="text" class="k-textbox deptId" data-role="dropdownlist" data-bind="value: selectedManu, source: manufacturers" data-text-field="text" data-value-field="value" data-option-label="All Manufacturers" id="manuIdFilter" />
-    <input style="display:inline-block;max-width:350px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: searchString" id="nameFilter" />
-</div>
 
 <div class="divider"></div>
 
