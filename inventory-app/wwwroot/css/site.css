@@ -31,6 +31,15 @@ i {
     float: right;
 }
 
+.filter-bar-left {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.filter-bar-label {
+    font-weight:bold;
+}
+
 .grid-header {
     background-color: rgba(0,0,0,.05);
     font-weight: bold;
@@ -53,12 +62,12 @@ i {
 }
 
 .grid-header {
-    font-size: 10px;
+    font-size: 12px;
     min-width: 1120px;
 }
 
 .grid-striped {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .col-grid-cell {
@@ -110,6 +119,9 @@ i {
     margin-left:-7.5px;
 }
 
+.row .k-dropdown {
+    width: 100%;
+}
 
 .footer {
     position:fixed;
