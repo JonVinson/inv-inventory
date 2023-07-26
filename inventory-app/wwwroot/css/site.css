@@ -25,6 +25,12 @@ i {
     color: darkgrey
 }
 
+.filter-bar {
+    display: inline-block;
+    white-space: nowrap;
+    float: right;
+}
+
 .grid-header {
     background-color: rgba(0,0,0,.05);
     font-weight: bold;
@@ -39,7 +45,7 @@ i {
 }
 
 .divider {
-    margin: 5px;
+    margin: 10px;
 }
 
 #listView {
@@ -104,9 +110,6 @@ i {
     margin-left:-7.5px;
 }
 
-.k-dropdown {
-    width:100%;
-}
 
 .footer {
     position:fixed;

@@ -125,13 +125,13 @@
 <h2>Inventory History</h2>
 
 <div>
-    <a id="add-new-button" style="max-width:150px" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">Add new record</a>
-    <div style="display:inline-block;white-space:nowrap" id="filter">
-        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+    <a id="add-new-button" style="max-width:150px" role="button" class="k-button k-button-solid-base k-button-solid k-button-md k-rounded-md" href="#" onclick="addRecord(this)">New Record</a>
+    <div class="filter-bar" id="filter">
+        <input type="text" class="k-textbox" data-role="datepicker"
                data-bind="value: startDate, events: { change: onChange }" data-type="date" id="startDate" placeholder="From..." />
-        <input style="display:inline-block" type="text" class="k-textbox" data-role="datepicker"
+        <input type="text" class="k-textbox" data-role="datepicker"
                data-bind="value: endDate, events: { change: onChange }" data-type="date" id="endDate" placeholder="To..." />
-        <input style="display:inline-block;max-width:200px" type="text" class="k-textbox deptId" data-role="textbox" data-bind="value: product, events: { change: onChange }" id="prodFilter" placeholder="Search for product..." />
+        <input type="text" class="k-textbox" data-role="textbox" data-bind="value: product, events: { change: onChange }" id="prodFilter" placeholder="Search for product..." />
     </div>
 </div>
 
