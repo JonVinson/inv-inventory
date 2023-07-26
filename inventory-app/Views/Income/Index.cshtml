@@ -53,9 +53,9 @@
 <script type="text/x-kendo-template" id="template0">
     <div class='row'>
         <div class='col-grid-cell-125'><span>#:department#</span></div>
-        <div class='col-grid-cell-long'><span>#:revenue#</span></div>
-        <div class='col-grid-cell-long'><span>#:cost#</span></div>
-        <div class='col-grid-cell-long'><span>#:netIncome#</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>#:kendo.toString(revenue,'n2')#</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>#:kendo.toString(cost,'n2')#</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>#:kendo.toString(netIncome,'\#,\#\#0.00;(\#,\#\#0.00);\#,\#\#0.00')#</span></div>
     </div>
 </script>
 }
@@ -79,9 +79,9 @@
 <div class="grid-header k-widget k-listview k-listview-bordered">
     <div class='row'>
         <div class='col-grid-cell-125'><span>Department</span></div>
-        <div class='col-grid-cell-long'><span>Revenue</span></div>
-        <div class='col-grid-cell-long'><span>Costs</span></div>
-        <div class='col-grid-cell-long'><span>Net Income</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>Revenue</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>Costs</span></div>
+        <div style='text-align:right' class='col-grid-cell'><span>Net Income</span></div>
     </div>
 </div>
 

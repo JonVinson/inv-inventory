@@ -531,7 +531,7 @@ namespace inventory_service
                 sales = sales.Where(t => t.Date <= endDate);
             }
 
-            var totals = _context.Departments.ToDictionary(d => d.Name!, d => new IncomeViewModel { Department = d.Name });
+            var totals = _context.Departments.ToDictionary(d => d.Name!, d => new IncomeViewModel { Department = d.Name, NetIncome = 0 });
 
             var totalPurchases = purchases.GroupBy(t => t.Product.Department.Name,
                 (k, g) => new { Department = k, Total = g.Sum(t => t.Price * t.Quantity) });
@@ -539,6 +539,7 @@ namespace inventory_service
             foreach (var item in totalPurchases)
             {
                 totals[item.Department!].Cost = item.Total;
+                totals[item.Department!].NetIncome = -item.Total;
             }
 
             var totalSales = sales.GroupBy(t => t.Product.Department.Name,
@@ -547,6 +548,7 @@ namespace inventory_service
             foreach (var item in totalSales)
             {
                 totals[item.Department!].Revenue = item.Total;
+                totals[item.Department!].NetIncome += item.Total;
             }
 
             var totalIncome = totals.Values
