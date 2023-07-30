@@ -18,7 +18,7 @@ namespace inventory_service
         public string? CompanyName { get; set; }
         public int Quantity { get; set; }
         public double? Price { get; set; }
-        public double? Total { get { return Quantity * Price; } }
+        public double? TotalAmount { get { return Quantity * Price; } }
         public string? Note { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿function refreshData() {
-    $("#listView").data("kendoListView").dataSource.read();
+    var lv = $("#listView").data("kendoListView");
+    lv.dataSource.read();
 }
 
 function confirmDelete(event, itemType) {
