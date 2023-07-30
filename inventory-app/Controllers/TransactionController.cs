@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using inventory_service;
 using inventory_app.Models;
 using inventory_data;
+using KendoCoreService.Models.Request;
+using KendoCoreService.Extensions;
 
 namespace inventory_app.Controllers
 {
@@ -26,12 +28,17 @@ namespace inventory_app.Controllers
             return View();
         }
 
-        public JsonResult Get(DateTime? startDate, DateTime? endDate, TransactionType transType, string product, string company)
+        public IActionResult Get(Request request, DateTime? startDate, DateTime? endDate, TransactionType transType, string product, string company)
         {
             try
             {
                 var items = _inventoryService.GetTransactions(startDate, endDate, transType, product, company);
-                return Json(items);
+                //if (skipItems > 0)
+                //{
+                //    request.Skip = skipItems;
+                //}
+                var result = items.ToDataSourceResult(request);
+                return Ok(result);
             }
             catch (Exception ex)
             {

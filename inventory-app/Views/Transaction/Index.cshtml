@@ -30,66 +30,84 @@
     });
 
     kendo.bind($("#filter"), viewModel);
+
+    var listView;
     
-    $(document).ready(function () {
-        var listView = $("#listView").kendoListView({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/Transaction/Get",
-                        data: () => {
-                            return {
-                                startDate: kendo.toString(viewModel.startDate, "yyyy-MM-dd"),
-                                endDate: kendo.toString(viewModel.endDate, "yyyy-MM-dd"),
-                                transType: viewModel.transactionType,
-                                product: viewModel.product,
-                                company: viewModel.company,
-                            };
-                        }
-                    },
-                    destroy: {
-                        url: "/Transaction/Delete",
-                        type: "POST"
-                        },
-                    update: {
-                        url: "/Transaction/Update",
-                        type: "POST",
-                        complete: function (e) {
-                            $("#listView").data("kendoListView").dataSource.read();
-                        }
-                    },
-                    create: {
-                        url: "/Transaction/Create",
-                        type: "POST",
-                        complete: function (e) {
-                            $("#listView").data("kendoListView").dataSource.read();
-                        }
-                    },
-                    parameterMap: function (data, type) {
-                        if (true) {
-                            data.date = kendo.toString(data.date, "yyyy-MM-dd");
-                            return data;
-                        }
+    function createDataSource() {
+        return new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/Transaction/Get",
+                    data: () => {
+                        return {
+                            startDate: kendo.toString(viewModel.startDate, "yyyy-MM-dd"),
+                            endDate: kendo.toString(viewModel.endDate, "yyyy-MM-dd"),
+                            transType: viewModel.transactionType,
+                            product: viewModel.product,
+                            company: viewModel.company
+                        };
                     }
                 },
-                schema: {
-                    model: {
-                        id: "id",
-                        fields: {
-                            id: { nullable: false, editable: false },
-                            date: { nullable: false, type: "Date" },
-                            transactionType: { nullable: false },
-                            productId: { nullable: false },
-                            productName: { nullable: true },
-                            companyId: { nullable: false },
-                            companyName: { nullable: true },
-                            quantity: { nullable: true },
-                            total: { nullable: true },
-                            price: { nullable: true }
-                        }
+                destroy: {
+                    url: "/Transaction/Delete",
+                    type: "POST"
+                },
+                update: {
+                    url: "/Transaction/Update",
+                    type: "POST",
+                    complete: function (e) {
+                        $("#listView").data("kendoListView").dataSource.read();
+                    }
+                },
+                create: {
+                    url: "/Transaction/Create",
+                    type: "POST",
+                    complete: function (e) {
+                        $("#listView").data("kendoListView").dataSource.read();
+                    }
+                },
+                parameterMap: function (data, type) {
+                    if (true) {
+                        data.date = kendo.toString(data.date, "yyyy-MM-dd");
+                        return data;
                     }
                 }
             },
+            schema: {
+                total: "total",
+                data: "data",
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { nullable: false, editable: false },
+                        date: { nullable: false, type: "Date" },
+                        transactionType: { nullable: false },
+                        productId: { nullable: false },
+                        productName: { nullable: true },
+                        companyId: { nullable: false },
+                        companyName: { nullable: true },
+                        quantity: { nullable: true },
+                        totalAmount: { nullable: true },
+                        price: { nullable: true }
+                    }
+                }
+            },
+            pageSize: 30,
+            serverPaging: true
+        });
+    }
+
+    function refreshData() {
+        var lv = $("#listView").data("kendoListView");
+        lv.setDataSource(createDataSource());
+        lv.dataSource.read();
+    }
+
+    $(document).ready(function () {
+        listView = $("#listView").kendoListView({
+            dataSource: createDataSource(),
+            scrollable: "endless",
+            height: 300,
             template: kendo.template($("#template0").html()),
             editTemplate: kendo.template($("#editTemplate0").html()),
             edit: onEdit,
@@ -147,7 +165,7 @@
         <div class='col-grid-cell-long'><span>#:companyName#</span></div>
         <div class='col-grid-cell'><span>#:quantity#</span></div>
         <div class='col-grid-cell'><span>#:price#</span></div>
-        <div class='col-grid-cell'><span>#:total#</span></div>
+        <div class='col-grid-cell'><span>#:totalAmount#</span></div>
         <div role='button' class='col-grid-button k-edit-button'><a href='\\#'><i class='fa-solid fa-pen'></i></a></div>
         <div role='button' class='col-grid-button k-delete-button'><a href='\\#'><i class="fa-solid fa-xmark"></i></a></div>
     </div>
@@ -163,7 +181,7 @@
         <div class='col-grid-cell-long'><input type="text" class="k-textbox" data-bind="value:companyId" name="companyId" id="comId" /></div>
         <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:quantity" name="quantity" /></div>
         <div class='col-grid-cell'><input type="text" class="k-textbox" data-bind="value:price" name="price" /></div>
-        <div class='col-grid-cell'><span>#:total#</span></div>
+        <div class='col-grid-cell'><span>#:totalAmount#</span></div>
         <div role='button' class='col-grid-button k-update-button'><a href='\\#'><i class='fa-solid fa-check'></i></a></div>
     <div role='button' class='col-grid-button k-cancel-button'><a href='\\#'><i class="fa-solid fa-cancel"></i></a></div>
     </div>
